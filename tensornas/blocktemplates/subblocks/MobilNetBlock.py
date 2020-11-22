@@ -20,6 +20,6 @@ class MobileBlock(Block):
                 LayerBlock(
                     input_shape=input_shape,
                     parent_block=self,
-                    layer_type=SupportedLayers.SEPERABLECONV2D,
+                    layer_type=SupportedLayers.SEPARABLECONV2D,
                 )
             ]

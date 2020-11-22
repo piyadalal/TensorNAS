@@ -29,3 +29,4 @@ Layers = Enum(
     "Layers", {str.upper(layer): mod for layer, mod in zip(LayerNames, LayerModules)}
 )
 SupportedLayers = Enum("SupportedLayers", {str.upper(i): i for i in LayerNames})
+print(list(SupportedLayers))

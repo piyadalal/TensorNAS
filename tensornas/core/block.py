@@ -39,7 +39,7 @@ class Block(ABC):
     A property to specify a minimum block count, is not required by each sub-class.
     """
     MIN_SUB_BLOCK = 1
-
+    MAX_SUB_BLOCK = 3
     @property
     @classmethod
     @abstractmethod
