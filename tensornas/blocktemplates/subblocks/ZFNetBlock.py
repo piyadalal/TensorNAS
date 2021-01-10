@@ -4,22 +4,24 @@ from tensornas.core.block import Block
 from tensornas.core.layerblock import LayerBlock
 from tensornas.layers import SupportedLayers
 
+
 class SubBlockTypes(Enum):
     """
     Layers that can be used in the generation of a feature extraction block are enumerated here for random selection
     """
-    CONV2D= auto()
-    DEPTHWISE_CONV = auto()
 
-class GhostBlock(Block):
+    CONV2D = auto()
+    MAXPOOL2D = auto()
+
+
+class ZFNetBlock(Block):
+    """
+    Layers that can be used in the extraction of features
+    """
 
     MAX_SUB_BLOCKS = 2
     SUB_BLOCK_TYPES = SubBlockTypes
 
-    """pass out_shape as input to Ghost Block and also ratio number for no. of channels to be processed by pointwise conv and remaining by depthwise conv.
- 
-    DepthwiseConv has a parameter multiplier for number of output channels to be generated for each input channel
-    """
     def generate_constrained_input_sub_blocks(self, input_shape):
         return [
             LayerBlock(
@@ -29,7 +31,7 @@ class GhostBlock(Block):
             )
         ]
 
-    def generate_random_sub_block(self,input_shape,layer_type):
+    def generate_random_sub_block(self, input_shape, layer_type):
         if layer_type == self.SUB_BLOCK_TYPES.CONV2D:
             return [
                 LayerBlock(
@@ -38,26 +40,12 @@ class GhostBlock(Block):
                     layer_type=SupportedLayers.CONV2D,
                 )
             ]
-        if layer_type == self.SUB_BLOCK_TYPES.DEPTHWISE_CONV:
+        elif layer_type == self.SUB_BLOCK_TYPES.MAXPOOL2D:
             return [
                 LayerBlock(
                     input_shape=input_shape,
                     parent_block=self,
-                    layer_type=SupportedLayers.DEPTHWISECONV,
+                    layer_type=SupportedLayers.MAXPOOL2D,
                 )
             ]
-
         return []
-
-    def get_keras_layers(self):
-        array = None
-        for sb in self.input_blocks + self.middle_blocks + self.output_blocks:
-            if not array:
-                array = sb.get_keras_layers()
-            else:
-                array = sb.get_keras_layers()(array)
-        return array
-
-
-
-

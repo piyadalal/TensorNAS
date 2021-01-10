@@ -18,46 +18,16 @@ class SqueezeExpansionBlock(Block):
     MAX_SUB_BLOCKS = 2
     SUB_BLOCK_TYPES = SqueezeExpansionBlockLayerTypes
 
-    def __init__(self, input_shape, parent_block, class_count, layer_type=-1):
-        self.class_count = class_count
 
-        super().__init__(input_shape, parent_block, layer_type)
-
-
-    def validate(self, repair):
-        ret = True
-        if not self.output_blocks[-1].layer_type == SupportedLayers.OUTPUTDENSE:
-            ret = False
-        return ret
-
-
-    def generate_constrained_input_sub_blocks(self, input_shape):
-        # TODO do not make it manually append but instead return a list of blocks
-        return [
-            LayerBlock(
-                input_shape=None, parent_block=self, layer_type=SupportedLayers.GLOBALAVERAGEPOOL2D
-
-            )
-
-        ]
-
-    def generate_constrained_output_sub_blocks(self, input_shape):
-        """Use of input_shape=None causes the input shape to be resolved from the previous layer."""
-        return [
-            LayerBlock(
-                input_shape=None,
-                parent_block=self,
-                layer_type=SupportedLayers.OUTPUTDENSE,
-                args=self.class_count,
-            )
-        ]
 
     def generate_random_sub_block(self, input_shape, layer_type):
-        return [
-            LayerBlock(
+
+        pooling= LayerBlock(
+                input_shape=None, parent_block=self, layer_type=SupportedLayers.GLOBALAVERAGEPOOL2D
+            )
+        Dense =  LayerBlock(
                 input_shape=None,
                 parent_block=self,
                 layer_type=SupportedLayers.HIDDENDENSE,
-                args=self.class_count,
             )
-        ]
+        return [pooling,Dense]

@@ -3,19 +3,20 @@ from enum import Enum, auto
 from tensornas.blocktemplates.subblocks.TwoDClassificationBlock import (
     TwoDClassificationBlock,
 )
-from tensornas.blocktemplates.subblocks.ResNetOutputBlock import ResNetOutputBlock
-from tensornas.blocktemplates.subblocks.ResidualBlock import ResidualBlock
+from tensornas.blocktemplates.subblocks.ShuffleNetBlock import (
+    ShuffleNetBlock,
+)
 from tensornas.core.blockarchitecture import BlockArchitecture
 
 
-class ResNetArchitectureSubBlocks(Enum):
-    RESIDUAL_BLOCK = auto()
+class ShuffleNetArchitectureSubBlocks(Enum):
+    SHUFFLENET_BLOCK = auto()
     CLASSIFICATION_BLOCK = auto()
 
 
-class ResNetBlockArchitecture(BlockArchitecture):
-    MAX_SUB_BLOCKS = 5
-    SUB_BLOCK_TYPES = ResNetArchitectureSubBlocks
+class ShuffleNetBlockArchitecture(BlockArchitecture):
+    MAX_SUB_BLOCKS = 2
+    SUB_BLOCK_TYPES = ShuffleNetArchitectureSubBlocks
 
     def __init__(self, input_shape, class_count):
         self.class_count = class_count
@@ -24,7 +25,7 @@ class ResNetBlockArchitecture(BlockArchitecture):
 
     def validate(self, repair):
         ret = True
-        if not isinstance(self.output_blocks[-1], ResNetOutputBlock):
+        if not isinstance(self.output_blocks[-1], TwoDClassificationBlock):
             ret = False
         return ret
 
@@ -39,8 +40,10 @@ class ResNetBlockArchitecture(BlockArchitecture):
         ]
 
     def generate_random_sub_block(self, input_shape, layer_type):
-        return [
-            ResidualBlock(
-                input_shape=input_shape, parent_block=self, class_count=self.class_count,layer_type=layer_type
-            )
-        ]
+        if layer_type == self.SUB_BLOCK_TYPES.SHUFFLENET_BLOCK:
+            return [
+                ShuffleNetBlock(
+                    input_shape=input_shape, parent_block=self, layer_type=layer_type
+                )
+            ]
+        return []

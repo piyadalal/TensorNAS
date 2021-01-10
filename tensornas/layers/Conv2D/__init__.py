@@ -14,6 +14,7 @@ class Args(Enum):
     PADDING = auto()
     DILATION_RATE = auto()
     ACTIVATION = auto()
+    GROUPS=auto()
 
 
 class Layer(NetworkLayer):
@@ -21,6 +22,7 @@ class Layer(NetworkLayer):
     MAX_KERNEL_DIMENSION = 7
     MAX_STRIDE = 7
     MAX_DILATION = 5
+    MAX_GROUPS = 128
 
     def _gen_args(cls, input_shape, args):
         return {
@@ -32,6 +34,7 @@ class Layer(NetworkLayer):
             cls.get_args_enum().PADDING: la.gen_padding(),
             cls.get_args_enum().DILATION_RATE: la.gen_dilation(),
             cls.get_args_enum().ACTIVATION: la.gen_activation(),
+            cls.get_args_enum().GROUPS: la.gen_groups(cls.MAX_GROUPS)
         }
 
     def _mutate_filters(self, operator=MutationOperators.STEP):

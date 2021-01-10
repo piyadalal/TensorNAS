@@ -6,10 +6,10 @@ from tensornas.layers.MaxPool import MaxPool3D, MaxPool2D
 
 print("Unit testing layers")
 
-test = Conv2D.Layer(input_tensor_shape)
-print(test.get_name())
-test.print()
-test.mutate()
+#test = Conv2D.Layer(input_tensor_shape)
+#print(test.get_name())
+#test.print()
+#test.mutate()
 
 test = Flatten.Layer(input_tensor_shape)
 print(test.get_name())

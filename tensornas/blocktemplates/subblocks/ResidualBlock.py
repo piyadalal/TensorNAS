@@ -15,11 +15,16 @@ class ResidualBlock(Block):
     MAX_SUB_BLOCKS = 2
     SUB_BLOCK_TYPES = SubBlockTypes
 
+    def __init__(self, input_shape, parent_block, class_count, layer_type):
+        self.class_count = class_count
+
+        super().__init__(input_shape, parent_block, layer_type)
+
     def generate_random_sub_block(self, input_shape, layer_type):
         if layer_type == self.SUB_BLOCK_TYPES.TWOD_CLASSIFICATION:
             return [
                 TwoDClassificationBlock(
-                    input_shape=input_shape, parent_block=self, layer_type=layer_type
+                    input_shape=input_shape, parent_block=self, class_count=self.class_count, layer_type=layer_type
                 )
             ]
         return []

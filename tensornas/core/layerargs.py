@@ -26,6 +26,10 @@ def gen_kernel_size(input_size):
     kernel_size = random.choice(range(1, input_size, 2))
     return (kernel_size, kernel_size)
 
+def gen_groups(input_size):
+    group = random.choice(range(1, input_size, 1))
+    return group
+
 
 def gen_2d_strides(max_bound):
     stride_size = random.randint(1, max_bound)

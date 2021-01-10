@@ -1,22 +1,19 @@
 from enum import Enum, auto
-from tensornas.layers import SupportedLayers
-from tensornas.blocktemplates.subblocks.TwoDClassificationBlock import (
-    TwoDClassificationBlock,
-)
-from tensornas.core.layerblock import LayerBlock
-from tensornas.blocktemplates.subblocks.GhostBlock import GhostBlock
+
+from tensornas.blocktemplates.subblocks.TwoDClassificationBlock import (TwoDClassificationBlock,)
+from tensornas.layers.MaxPool import GlobalAveragePool2D
+from tensornas.blocktemplates.subblocks.EffNetBlock import (EffNetBlock,)
 from tensornas.core.blockarchitecture import BlockArchitecture
 
-class GhostNetArchitectureSubBlocks(Enum):
-    GHOST_BLOCK = auto()
+
+class EffNetArchitectureSubBlocks(Enum):
+    EFFNET_BLOCK= auto()
     CLASSIFICATION_BLOCK = auto()
-    CONV2D= auto()
 
 
-# noinspection PyInterpreter
-class GhostNetBlockArchitecture(BlockArchitecture):
+class EffNetBlockArchitecture(BlockArchitecture):
     MAX_SUB_BLOCKS = 3
-    SUB_BLOCK_TYPES = GhostNetArchitectureSubBlocks
+    SUB_BLOCK_TYPES = EffNetArchitectureSubBlocks
 
     def __init__(self, input_shape, class_count):
         self.class_count = class_count
@@ -26,22 +23,25 @@ class GhostNetBlockArchitecture(BlockArchitecture):
     def validate(self, repair):
         ret = True
         """should add a squeezeBlock for auto selection to tensornas.blocktemplates.subblocks """
-        if not isinstance(self.output_blocks[0], TwoDClassificationBlock):
+        if not isinstance(self.input_blocks[0], EffNetBlock):
             ret = False
 
         return ret
 
     def generate_constrained_input_sub_blocks(self, input_shape):
         return [
-            LayerBlock(
+            EffNetBlock(
                 input_shape=input_shape,
                 parent_block=self,
-                layer_type=SupportedLayers.CONV2D
+                layer_type=self.SUB_BLOCK_TYPES.EFFNET_BLOCK,
             )
         ]
 
     def generate_constrained_output_sub_blocks(self, input_shape):
         return [
+            GlobalAveragePool2D(input_shape=input_shape),
+            ]
+        [
             TwoDClassificationBlock(
                 input_shape=input_shape,
                 parent_block=self,
@@ -52,7 +52,7 @@ class GhostNetBlockArchitecture(BlockArchitecture):
 
     def generate_random_sub_block(self, input_shape, layer_type):
         return [
-            GhostBlock(
+            EffNetBlock(
                 input_shape=input_shape, parent_block=self, layer_type=layer_type
             )
         ]

@@ -1,5 +1,7 @@
 from tensornas.blocktemplates.blockarchitectures import ClassificationBlockArchitecture
 from demos.DemoMNISTInput import *
+import tensorflow as tf
+import visualkeras
 
 print("##########################################")
 print("Testing classification block architecture")

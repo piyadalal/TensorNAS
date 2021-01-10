@@ -4,19 +4,16 @@ from tensornas.blocktemplates.subblocks.TwoDClassificationBlock import (
     TwoDClassificationBlock,
 )
 from tensornas.core.layerblock import LayerBlock
-from tensornas.blocktemplates.subblocks.GhostBlock import GhostBlock
+from tensornas.blocktemplates.subblocks.SqueezeExpansionBlock import SqueezeExpansionBlock
 from tensornas.core.blockarchitecture import BlockArchitecture
 
-class GhostNetArchitectureSubBlocks(Enum):
-    GHOST_BLOCK = auto()
+class SqueezeExpansionNetArchitectureSubBlocks(Enum):
+    SQUEEZE_EXPANSION_BLOCK = auto()
     CLASSIFICATION_BLOCK = auto()
-    CONV2D= auto()
 
-
-# noinspection PyInterpreter
-class GhostNetBlockArchitecture(BlockArchitecture):
+class SqueezeExpansionNetBlockArchitecture(BlockArchitecture):
     MAX_SUB_BLOCKS = 3
-    SUB_BLOCK_TYPES = GhostNetArchitectureSubBlocks
+    SUB_BLOCK_TYPES = SqueezeExpansionNetArchitectureSubBlocks
 
     def __init__(self, input_shape, class_count):
         self.class_count = class_count
@@ -52,7 +49,7 @@ class GhostNetBlockArchitecture(BlockArchitecture):
 
     def generate_random_sub_block(self, input_shape, layer_type):
         return [
-            GhostBlock(
+            SqueezeExpansionBlock(
                 input_shape=input_shape, parent_block=self, layer_type=layer_type
             )
         ]

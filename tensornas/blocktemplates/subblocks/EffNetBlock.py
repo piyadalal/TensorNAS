@@ -5,21 +5,17 @@ from tensornas.core.layerblock import LayerBlock
 from tensornas.layers import SupportedLayers
 
 class SubBlockTypes(Enum):
-    """
-    Layers that can be used in the generation of a feature extraction block are enumerated here for random selection
-    """
-    CONV2D= auto()
-    DEPTHWISE_CONV = auto()
+    CONV2D = auto()
+    MAXPOOL = auto()
+    DEPTHWISE_CONV2D = auto()
+    POINTWISE_CONV2D = auto()
 
-class GhostBlock(Block):
 
-    MAX_SUB_BLOCKS = 2
+class EffNetBlock(Block):
+
+    MAX_SUB_BLOCKS = 3
     SUB_BLOCK_TYPES = SubBlockTypes
 
-    """pass out_shape as input to Ghost Block and also ratio number for no. of channels to be processed by pointwise conv and remaining by depthwise conv.
- 
-    DepthwiseConv has a parameter multiplier for number of output channels to be generated for each input channel
-    """
     def generate_constrained_input_sub_blocks(self, input_shape):
         return [
             LayerBlock(
@@ -29,7 +25,7 @@ class GhostBlock(Block):
             )
         ]
 
-    def generate_random_sub_block(self,input_shape,layer_type):
+    def generate_random_sub_block(self, input_shape, layer_type):
         if layer_type == self.SUB_BLOCK_TYPES.CONV2D:
             return [
                 LayerBlock(
@@ -38,12 +34,20 @@ class GhostBlock(Block):
                     layer_type=SupportedLayers.CONV2D,
                 )
             ]
-        if layer_type == self.SUB_BLOCK_TYPES.DEPTHWISE_CONV:
+        if layer_type == self.SUB_BLOCK_TYPES.DEPTHWISE_CONV2D:
             return [
                 LayerBlock(
                     input_shape=input_shape,
                     parent_block=self,
                     layer_type=SupportedLayers.DEPTHWISECONV,
+                )
+            ]
+        if layer_type == self.SUB_BLOCK_TYPES.MAXPOOL:
+            return [
+                LayerBlock(
+                    input_shape=input_shape,
+                    parent_block=self,
+                    layer_type=SupportedLayers.MAXPOOL,
                 )
             ]
 
@@ -57,7 +61,3 @@ class GhostBlock(Block):
             else:
                 array = sb.get_keras_layers()(array)
         return array
-
-
-
-

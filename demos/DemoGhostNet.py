@@ -1,6 +1,8 @@
 from tensornas.blocktemplates.blockarchitectures import GhostNetBlockArchitecture
 from demos.DemoMNISTInput import *
 from tensornas.core.util import list_available_blocks
+import tensorflow as tf
+import visualkeras
 
 print("##########################################")
 print("Testing Ghost Net block architecture")
@@ -13,6 +15,8 @@ model = GhostNetBlockArchitecture.GhostNetBlockArchitecture(
 )
 
 model.print()
+
+
 
 metrics = model.evaluate(
     train_data=images_train,
