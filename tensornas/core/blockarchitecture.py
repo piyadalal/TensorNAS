@@ -1,15 +1,15 @@
 import numpy as np
 import tensorflow as tf
 import keras
-import pydot
-from ann_visualizer.visualize import ann_viz
-import pydotplus
-from pydotplus import graphviz
-from keras_sequential_ascii import keras2ascii
-
+from tensornas.core.layer import NetworkLayer
+#import pydot
+#from ann_visualizer.visualize import ann_viz
+#import pydotplus
+#from pydotplus import graphviz
+#from keras_sequential_ascii import
 from keras.utils.vis_utils import plot_model
 from keras.utils.vis_utils import model_to_dot
-keras.utils.vis_utils.pydot = pydot
+#keras.utils.vis_utils.pydot = pydot
 from tensornas.core.block import Block
 from tensorflow.python.keras.layers import SeparableConv2D,Conv2D,DepthwiseConv2D,GlobalAveragePooling2D, MaxPool3D,Dense,Flatten, Dropout, MaxPooling2D,DepthwiseConv2D
 
@@ -39,13 +39,17 @@ class BlockArchitecture(Block):
     def get_keras_model(self, optimizer, loss, metrics):
         layers = self.get_keras_layers()
         model = tf.keras.Sequential()
-
         for layer in layers:
+            print(layer)
+            #self.plot_architecture(layer)
             model.add(layer)
         model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
-        #model.add(visualkeras.SpacingDummyLayer(spacing=100))
-        #visualkeras.layered_view(model, spacing=0, to_file="model.png")
-        keras2ascii(model)
+        model.add(visualkeras.SpacingDummyLayer(spacing=100))
+        visualkeras.layered_view(model, spacing=0, to_file="model.png")
+#        keras2ascii(model)
+        for layer in model.layers:
+            print(layer)
+
         #plot_model(model, to_file="Output.png")
         #ann_viz(model, title="Artificial Neural network - Model Visualization")
         return model
@@ -65,6 +69,8 @@ class BlockArchitecture(Block):
     ):
         model = self.get_keras_model(optimizer=optimizer, loss=loss, metrics=metrics)
         # model.summary()
+        NetworkLayer.plot_layer()
+
         try:
             model.fit(
                 x=train_data,
@@ -96,3 +102,6 @@ class BlockArchitecture(Block):
             model.evaluate(test_data, test_labels)[1] * 100,
         ]
         return ret
+    def plot_architecture(self,layer):
+        pass
+

@@ -7,8 +7,9 @@ from tensornas.layers import SupportedLayers
 class SubBlockTypes(Enum):
     CONV2D = auto()
     MAXPOOL = auto()
-    DEPTHWISE_CONV2D = auto()
-    POINTWISE_CONV2D = auto()
+    DEPTHWISE_CONV2D_1_n = auto()
+    DEPTHWISE_CONV2D_n_1 = auto()
+    POINTWISE_CONV2D=auto()
 
 
 class EffNetBlock(Block):
@@ -21,37 +22,43 @@ class EffNetBlock(Block):
             LayerBlock(
                 input_shape=input_shape,
                 parent_block=self,
-                layer_type=SupportedLayers.CONV2D,
+                layer_type=SupportedLayers.POINTWISE_CONV2D,
             )
         ]
 
     def generate_random_sub_block(self, input_shape, layer_type):
-        if layer_type == self.SUB_BLOCK_TYPES.CONV2D:
-            return [
+
+            return[
+            [
                 LayerBlock(
                     input_shape=input_shape,
                     parent_block=self,
-                    layer_type=SupportedLayers.CONV2D,
+                    layer_type=SupportedLayers.DEPTHWISECONV1N,
                 )
             ]
-        if layer_type == self.SUB_BLOCK_TYPES.DEPTHWISE_CONV2D:
-            return [
-                LayerBlock(
-                    input_shape=input_shape,
-                    parent_block=self,
-                    layer_type=SupportedLayers.DEPTHWISECONV,
-                )
-            ]
-        if layer_type == self.SUB_BLOCK_TYPES.MAXPOOL:
-            return [
+            [
                 LayerBlock(
                     input_shape=input_shape,
                     parent_block=self,
                     layer_type=SupportedLayers.MAXPOOL,
                 )
             ]
-
-        return []
+            [
+                LayerBlock(
+                    input_shape=input_shape,
+                    parent_block=self,
+                    layer_type=SupportedLayers.DEPTHWISECONVN1,
+                )
+            ]
+        ]
+    def generate_constrained_output_sub_blocks(self, input_shape):
+        return [
+            LayerBlock(
+                input_shape=input_shape,
+                parent_block=self,
+                layer_type=SupportedLayers.CONV2D,
+            )
+        ]
 
     def get_keras_layers(self):
         array = None

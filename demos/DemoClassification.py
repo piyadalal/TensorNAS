@@ -1,8 +1,9 @@
 from tensornas.blocktemplates.blockarchitectures import ClassificationBlockArchitecture
 from demos.DemoMNISTInput import *
+import os
 import tensorflow as tf
-import visualkeras
-
+#import visualkeras
+import subprocess
 print("##########################################")
 print("Testing classification block architecture")
 print("##########################################")
@@ -12,6 +13,11 @@ model = ClassificationBlockArchitecture.ClassificationBlockArchitecture(
 )
 
 model.print()
+#model.display()
+
+
+#subprocess.call(['sh', '../tikzmake.sh MyArchitecture'])
+#model.plot_architecture()
 
 metrics = model.evaluate(
     train_data=images_train,
@@ -46,5 +52,6 @@ metrics = model.evaluate(
 )
 
 print(metrics)
+
 
 print("Done")

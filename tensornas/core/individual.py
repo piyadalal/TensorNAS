@@ -49,3 +49,6 @@ class Individual:
 
     def print_tree(self):
         print(self.block_architecture.get_ascii_tree())
+
+    def visualize_architecture(self):
+        pass

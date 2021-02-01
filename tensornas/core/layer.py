@@ -2,7 +2,7 @@ import importlib
 import random
 import re
 from abc import ABC, abstractmethod
-
+from tensornas.core.Plot_Model.pyexamples import MyArchitecture
 
 class LayerShape:
     def __init__(self, dimensions=None):
@@ -21,6 +21,7 @@ class LayerShape:
 
     def set(self, dimensions):
         self.dimensions = dimensions
+
 
     def get(self):
         return tuple(self.dimensions)
@@ -52,7 +53,8 @@ class NetworkLayer(ABC):
     layer then the Args enum can be placed inside the parent sub-package such that it can be shared between the
     sub-classed layers.
     """
-
+    layers=[]
+    Layer_Name_List=[]
     def __init__(self, input_shape, args=None):
         self.args_enum = self._get_args_enum()
         self.args = self._gen_args(input_shape, args)
@@ -127,8 +129,10 @@ class NetworkLayer(ABC):
                 self.get_name(), self.inputshape, self.outputshape
             )
         )
+        NetworkLayer.Layer_Name_List.append(self.get_name())
         try:
             arg_list = list(self.get_args_enum())
+            NetworkLayer.layers.append(self.args)
             for param, param_value in self.args.items():
                 if isinstance(param, int):
                     name = arg_list[param - 1].name
@@ -138,6 +142,22 @@ class NetworkLayer(ABC):
         except Exception:
             pass
         print("")
+
+    @classmethod
+    def plot_layer(cls):
+        try:
+            #arg_list = list(self.get_args_enum())
+            #name=self.get_name()
+            #args=self.args
+            names=NetworkLayer.Layer_Name_List
+            args=NetworkLayer.layers
+            print(names)
+            MyArchitecture.Plot_Model.Plot_Layer(names,args)
+
+        except Exception:
+            pass
+        print("")
+
 
     def repair(self):
         pass

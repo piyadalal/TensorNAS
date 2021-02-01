@@ -48,4 +48,4 @@ class FeatureExtractionBlock(Block):
                     layer_type=SupportedLayers.MAXPOOL2D,
                 )
             ]
-        return []
+        #return []

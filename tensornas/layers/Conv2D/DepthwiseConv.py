@@ -13,6 +13,7 @@ Given a 4D input tensor ('NHWC' or 'NCHW' data formats) and a filter
   If we want output channels= output/ratio*(ratio-1), then we would have to calculate the 
 """
 class Layer(Layer):
+
     def get_keras_layer(self):
         return [
             tf.keras.layers.DepthwiseConv2D(

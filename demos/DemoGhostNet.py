@@ -3,6 +3,7 @@ from demos.DemoMNISTInput import *
 from tensornas.core.util import list_available_blocks
 import tensorflow as tf
 import visualkeras
+import os
 
 print("##########################################")
 print("Testing Ghost Net block architecture")
@@ -15,7 +16,8 @@ model = GhostNetBlockArchitecture.GhostNetBlockArchitecture(
 )
 
 model.print()
-
+model.display()
+os.system("sh ../tikzmake.sh MyArchitecture")
 
 
 metrics = model.evaluate(

@@ -2,9 +2,9 @@ import itertools
 import random
 import re
 from abc import ABC, abstractmethod
-
+from tensornas.core.Plot_Model.pyexamples import MyArchitecture
 from tensornas.core.util import mutate_enum_i
-
+from tensornas.core.layer import NetworkLayer
 
 class Block(ABC):
     """
@@ -289,11 +289,18 @@ class Block(ABC):
         child nodes. If you wish to print all children nodes then only override print_self and not print_self
         """
         self.print_self()
+        #self.plot_layer()
         for sb in self.input_blocks + self.middle_blocks + self.output_blocks:
-            sb.print()
+           sb.print()
+
+
+
+
 
     def print_self(self):
         pass
+    #def plot_layer(self):
+        #pass
 
     def _get_name(self):
         return str(self.layer_type).split(".")[-1]

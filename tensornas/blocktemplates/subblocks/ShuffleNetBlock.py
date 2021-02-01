@@ -11,7 +11,7 @@ class SubBlockTypes(Enum):
     """
 
     DEPTHWISECONV2D = auto()
-    POINTWISECONV2D =auto()
+    #POINTWISECONV2D =auto()
     GROUPEDCONV2D = auto()
 
 
@@ -28,8 +28,9 @@ class ShuffleNetBlock(Block):
             LayerBlock(
                 input_shape=input_shape,
                 parent_block=self,
-                layer_type=SupportedLayers.POINTWISECONV2D,
+                layer_type=SupportedLayers.GROUPEDCONV2D,
             )
+            #to be included is channel shuflle operation
         ]
 
     def generate_random_sub_block(self, input_shape, layer_type):
@@ -48,6 +49,7 @@ class ShuffleNetBlock(Block):
                     parent_block=self,
                     layer_type=SupportedLayers.GROUPEDCONV2D,
                 )
+                #channel -shuffle
             ]
         return []
 
@@ -56,7 +58,7 @@ class ShuffleNetBlock(Block):
             LayerBlock(
                 input_shape=input_shape,
                 parent_block=self,
-                layer_type=SupportedLayers.POINTWISECONV2D,
+                layer_type=SupportedLayers.GROUPEDCONV2D,
             )
         ]
 
