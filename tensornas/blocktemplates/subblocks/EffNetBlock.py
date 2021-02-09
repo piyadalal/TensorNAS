@@ -35,7 +35,7 @@ class EffNetBlock(Block):
                 LayerBlock(
                     input_shape=input_shape,
                     parent_block=self,
-                    layer_type=SupportedLayers.POINTWISECONV,
+                    layer_type=SupportedLayers.POINTWISECONV2D,
                     args={conv_args.FILTERS: int(input_shape[-1] / bottleneck_factor)},
                 )
             )
@@ -74,7 +74,7 @@ class EffNetBlock(Block):
                 LayerBlock(
                     input_shape=layers[-1].get_output_shape(),
                     parent_block=self,
-                    layer_type=SupportedLayers.POINTWISECONV,
+                    layer_type=SupportedLayers.POINTWISECONV2D,
                     args={
                         conv_args.KERNEL_SIZE: (bottleneck_factor, 1),
                         conv_args.FILTERS: input_shape[-1],

@@ -41,6 +41,9 @@ class LayerBlock(Block):
     def print_self(self):
         self.layer.print()
 
+    def plot_layer(self):
+        self.layer.plot_layer()
+
     def generate_random_sub_block(self, layer_type):
         pass
 

@@ -48,6 +48,7 @@ class ResidualBlock(Block):
             ]
         return []
 
+
     def get_keras_layers(self, input_tensor):
         tmp = input_tensor
         for sb in self.input_blocks + self.middle_blocks + self.output_blocks:

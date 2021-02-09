@@ -2,13 +2,13 @@
 
 
 python $1.py
-pdflatex $2.tex
+pdflatex $1.tex
 
 rm *.aux *.log *.vscodeLog
 #rm *.tex
 
 if [[ "$OSTYPE" == "Darwin"* ]]; then
-    open $2.pdf
+    open $1.pdf
 else
-    open $2.pdf
+    xdg-open $1.pdf
 fi

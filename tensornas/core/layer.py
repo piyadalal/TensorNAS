@@ -2,9 +2,11 @@ import importlib
 import random
 import re
 from abc import ABC, abstractmethod
+from demos.Plot_Model.pyexamples import MyArchitecture
 
 
 class LayerShape:
+
     def __init__(self, dimensions=None):
         self.dimensions = dimensions
 
@@ -27,6 +29,8 @@ class LayerShape:
 
 
 class NetworkLayer(ABC):
+    layers = []
+    Layer_Name_List = []
     """
     Layers are implemented using an abstract class that must provide a number of abstract methods. This is done such
     that the implemented layers can be loaded in a plugin fashion from the layers sub-package. This allows for users
@@ -127,14 +131,31 @@ class NetworkLayer(ABC):
                 self.get_name(), self.inputshape, self.outputshape
             )
         )
+        NetworkLayer.Layer_Name_List.append(self.get_name())
         try:
             arg_list = list(self.get_args_enum())
+            NetworkLayer.layers.append(self.args)
             for param, param_value in self.args.items():
                 if isinstance(param, int):
                     name = arg_list[param - 1].name
                 else:
                     name = param.name
                 print("{}: {}".format(name, param_value))
+        except Exception:
+            pass
+        print("")
+
+    @classmethod
+    def plot_layer(cls):
+        try:
+            # arg_list = list(self.get_args_enum())
+            # name=self.get_name()
+            # args=self.args
+            names = NetworkLayer.Layer_Name_List
+            args = NetworkLayer.layers
+            print(names)
+            MyArchitecture.Plot_Model.Plot_Layer(names, args)
+
         except Exception:
             pass
         print("")

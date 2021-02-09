@@ -1,0 +1,43 @@
+import pyvww
+from pyvww.utils import VisualWakeWords
+import numpy as np
+
+
+img=[]
+dataDir='/Users/priyadalal/Desktop/visualwakewords-master/annotations_vww'
+dataType='train'
+annFile='{}/instances_{}.json'.format(dataDir,dataType)
+print(annFile)
+vww = VisualWakeWords(annFile)
+
+# display Visual Wake Words categories and supercategories
+cats = vww.loadCats(vww.getCatIds())
+print(cats)
+nms=[cat['name'] for cat in cats]
+print('Visual Wake Words categories: \n{}\n'.format(' '.join(nms)))
+nms = set([cat['supercategory'] for cat in cats])
+print('Visual Wake Words supercategories: \n{}'.format(' '.join(nms)))
+#train_dataset = pyvww.pytorch.VisualWakeWordsClassification(root="/Users/priyadalal/Desktop/visualwakewords-master/scripts/train2017/all",  annFile="/Users/priyadalal/Desktop/visualwakewords-master/scripts/annotations_vww/instances_train.json")
+#cats = train_dataset.loadCats(train_dataset.getCatIds())
+# get all images containing given categories, select one at random
+catIds = vww.getCatIds(catNms=['person','dog','skateboard'])
+print("category id {}".format(catIds))
+imgIds = vww.getImgIds(catIds=catIds )
+print("Image_ids {}".format(imgIds))
+#vww.download("./Train_Images",imgIds)
+#imgIds = vww.getImgIds(imgIds = [401446])
+#print("Image_Id {}".format(imgIds))
+
+img = vww.loadImgs(imgIds)
+
+
+def shape(image):
+    height=image['height']
+    width=image['width']
+    return (height,width)
+
+shape=shape(img[0])
+print(shape)
+
+#vww.download("./Result_Images",imgIds)
+

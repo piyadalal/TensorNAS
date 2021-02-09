@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 
 from tensornas.core.block import Block
+from tensornas.core.layer import NetworkLayer
 
 
 class BlockArchitecture(Block):
@@ -38,6 +39,7 @@ class BlockArchitecture(Block):
                 optimizer=optimizer, loss=loss, metrics=metrics
             )
             model.summary()
+            NetworkLayer.plot_layer()
             if filename:
                 from tensornas.core.util import save_model
 

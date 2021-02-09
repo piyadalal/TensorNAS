@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+#import tensorflow as tf
 import tensorflow as tf
 
 from tensornas.core.layer import NetworkLayer
