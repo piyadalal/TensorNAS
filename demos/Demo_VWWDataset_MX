@@ -1,43 +1,84 @@
 import pyvww
 from pyvww.utils import VisualWakeWords
 import numpy as np
-
+from gluoncv import data, utils
 
 img=[]
+Images_Tag=[]
+Links=[]
+Catid=[]
+Annotations=[]
+Labels=[]
 dataDir='/Users/priyadalal/Desktop/visualwakewords-master/annotations_vww'
 dataType='train'
 annFile='{}/instances_{}.json'.format(dataDir,dataType)
+#todo: trying to give vww annotations to COCO API
+#vww_annfile='{}/instances_{}'.format(dataDir,dataType)
+
+#train_dataset = data.COCODetection('.',splits=[vww_annfile])
 print(annFile)
 vww = VisualWakeWords(annFile)
 
+print("Category Id {}".format(vww.getCatIds()))
 # display Visual Wake Words categories and supercategories
 cats = vww.loadCats(vww.getCatIds())
-print(cats)
+
+print("Categories {}".format(cats))
 nms=[cat['name'] for cat in cats]
-print('Visual Wake Words categories: \n{}\n'.format(' '.join(nms)))
+print('Visual Wake Words subcategories: \n{}\n'.format(' '.join(nms)))
 nms = set([cat['supercategory'] for cat in cats])
 print('Visual Wake Words supercategories: \n{}'.format(' '.join(nms)))
 #train_dataset = pyvww.pytorch.VisualWakeWordsClassification(root="/Users/priyadalal/Desktop/visualwakewords-master/scripts/train2017/all",  annFile="/Users/priyadalal/Desktop/visualwakewords-master/scripts/annotations_vww/instances_train.json")
 #cats = train_dataset.loadCats(train_dataset.getCatIds())
 # get all images containing given categories, select one at random
-catIds = vww.getCatIds(catNms=['person','dog','skateboard'])
+catIds = vww.getCatIds(catNms=["not-person"])
 print("category id {}".format(catIds))
+
+imgIds_0 = vww.getImgIds(catIds=0)
+Image_Tag=vww.loadImgs(imgIds_0)
+print("Image_ids {}".format(imgIds_0))
+print("Image Tag corresponding to ImageId_0 {}".format(Image_Tag))
+
+
 imgIds = vww.getImgIds(catIds=catIds )
 print("Image_ids {}".format(imgIds))
-#vww.download("./Train_Images",imgIds)
-#imgIds = vww.getImgIds(imgIds = [401446])
-#print("Image_Id {}".format(imgIds))
 
-img = vww.loadImgs(imgIds)
+Image_Tag=vww.loadImgs(imgIds[:20])
+#list every image as list
+#print(Image_Tag)
+print("Image Tag corresponding to ImageId {}".format(Image_Tag[0:10]))
+for i in range(0,len(Image_Tag)):
+    Links.append(Image_Tag[i]['coco_url'])
+    Annotations.append(vww.loadAnns(vww.getAnnIds(imgIds[i]))[0])
 
 
-def shape(image):
-    height=image['height']
-    width=image['width']
-    return (height,width)
+for j in range(0,len(Annotations)):
+    Dict=Annotations[i]
+    Catid.append(Dict['category_id'])
 
-shape=shape(img[0])
-print(shape)
+print(Catid)
+
+
+"""if _isArrayLike(ids):
+    return [self.anns[id] for id in ids]
+elif type(ids) == int:
+    return [self.anns[ids]]
+# Anns with one single image id is returned as a list
+
+
+print(type(vww.loadAnns(vww.getAnnIds(imgIds[0]))[0]))
+dict=Annotations[0]
+print(type(Annotations[0]))
+print(Annotations[0][0])
+print(type(Annotations))
+
+Anns=vww.loadAnns(vww.getAnnIds(imgIds[0]))
+print("Annotations from Ann Id found from Image Id{}{}".format(imgIds[0],Anns))
+#Anns is a list of dict
+Cat_id=Anns[0]['category_id']
+print("Category Id found from Anns dict corresponding to Img id{}---{}".format(imgIds[0],vww.loadAnns(vww.getAnnIds(imgIds[0]))[0]['category_id']))
+
+"""
 
 #vww.download("./Result_Images",imgIds)
 

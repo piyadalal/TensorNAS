@@ -31,6 +31,7 @@ print('Bounding boxes (num_boxes, x_min, y_min, x_max, y_max):\n',
       bounding_boxes)
 print('Class IDs (num_boxes, ):\n', class_ids)
 
+
 utils.viz.plot_bbox(train_image.asnumpy(), bounding_boxes, scores=None,
                     labels=class_ids, class_names=train_dataset.classes)
 plt.show()
