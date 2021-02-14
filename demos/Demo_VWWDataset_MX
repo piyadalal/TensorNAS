@@ -2,6 +2,7 @@ import pyvww
 from pyvww.utils import VisualWakeWords
 import numpy as np
 from gluoncv import data, utils
+from pycocotools.coco import COCO
 
 img=[]
 Images_Tag=[]
@@ -9,6 +10,30 @@ Links=[]
 Catid=[]
 Annotations=[]
 Labels=[]
+Image_Labels={}
+
+
+
+dataDir='/Volumes/DS/Priya_Desktop/annotations_2'
+dataType='train2017'
+annFile='{}/instances_{}.json'.format(dataDir,dataType)
+
+coco = COCO(annFile)
+# display COCO categories and supercategories
+cats = coco.loadCats(coco.getCatIds())
+cat_nms=[cat['name'] for cat in cats]
+print('COCO categories: \n{}\n'.format(' '.join(cat_nms)))
+
+supercat_nms = set([cat['supercategory'] for cat in cats])
+print('COCO supercategories: \n{}'.format(' '.join(supercat_nms)))
+
+catIds = coco.getCatIds(catNms=cat_nms)
+print("COCO category id {}".format(catIds))
+imgIds_all= coco.getImgIds(catIds=catIds)
+print("Image_ids_all {}".format(imgIds_all))
+Image_Tag=coco.loadImgs(imgIds_all)
+print("Image_Tag all {}".format(Image_Tag[:4]))
+
 dataDir='/Users/priyadalal/Desktop/visualwakewords-master/annotations_vww'
 dataType='train'
 annFile='{}/instances_{}.json'.format(dataDir,dataType)
@@ -31,25 +56,36 @@ print('Visual Wake Words supercategories: \n{}'.format(' '.join(nms)))
 #train_dataset = pyvww.pytorch.VisualWakeWordsClassification(root="/Users/priyadalal/Desktop/visualwakewords-master/scripts/train2017/all",  annFile="/Users/priyadalal/Desktop/visualwakewords-master/scripts/annotations_vww/instances_train.json")
 #cats = train_dataset.loadCats(train_dataset.getCatIds())
 # get all images containing given categories, select one at random
-catIds = vww.getCatIds(catNms=["not-person"])
+catIds = vww.getCatIds(catNms=['person'])
 print("category id {}".format(catIds))
+imgIds_person= vww.getImgIds(catIds=catIds)
+print(len(imgIds_person))
+print("Image_ids_person {}".format(imgIds_person))
+print(len(imgIds_all))
+for i in imgIds_person:
+    if i in imgIds_all:
+        imgIds_all.remove(i)
+print(len(imgIds_all))
+coco.imgs()
 
-imgIds_0 = vww.getImgIds(catIds=0)
-Image_Tag=vww.loadImgs(imgIds_0)
-print("Image_ids {}".format(imgIds_0))
-print("Image Tag corresponding to ImageId_0 {}".format(Image_Tag))
-
-
-imgIds = vww.getImgIds(catIds=catIds )
-print("Image_ids {}".format(imgIds))
-
-Image_Tag=vww.loadImgs(imgIds[:20])
+#print("Not-person Image_ID {}".format(img_ids_not_person))
+#Image_Tag_Not_Person=vww.loadImgs(img_ids_not_person)
 #list every image as list
 #print(Image_Tag)
-print("Image Tag corresponding to ImageId {}".format(Image_Tag[0:10]))
+#print("Image Tag_person corresponding to Not-person {}".format(Image_Tag_Not_Person[0:4]))
+
+
+
+Image_Tag=vww.loadImgs(imgIds_person)
+#list every image as list
+#print(Image_Tag)
+print("Image Tag_person corresponding to ImageId {}".format(Image_Tag[0:4]))
 for i in range(0,len(Image_Tag)):
     Links.append(Image_Tag[i]['coco_url'])
-    Annotations.append(vww.loadAnns(vww.getAnnIds(imgIds[i]))[0])
+    Annotations.append(vww.loadAnns(vww.getAnnIds(imgIds_person[i]))[0])
+    Image_Labels[str(Image_Tag[i]['coco_url'])]=vww.loadAnns(vww.getAnnIds(imgIds_person[i]))[0]['category_id']
+
+print(Image_Labels)
 
 
 for j in range(0,len(Annotations)):
@@ -82,3 +118,19 @@ print("Category Id found from Anns dict corresponding to Img id{}---{}".format(i
 
 #vww.download("./Result_Images",imgIds)
 
+non_person_dict={}
+for a in ann:
+  non_person['here comes url of corresponding image id from ann']=a['category_id']
+  get the url from that image id in Image tag <--a['image_id']
+  Images[][0]['id']
+
+non_person_dict={}
+Links=[]
+for i,img,a in zip(len(Image),Image,ann):
+  if img[i][0]['id']==a['image_id']:
+    Links.append(img[i][0]['coco_url'])
+for a in ann:
+  non_person['here comes url of corresponding image id from ann']=a['category_id']
+  get the url from that image id in Image tag <--a['image_id']
+  Image[]
+  Images[][0]['id']

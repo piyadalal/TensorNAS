@@ -14,6 +14,7 @@ class ExpandBlock(Block):
     """
     And Expand block is a block used in SqueezeNet following a squeeze block within a Fire Module. A Expand block is a
     collection of parallel convolutional layers.
+    #todo: 1*1 and 3*3 convs in particular
     """
 
     MAX_SUB_BLOCKS = 5

@@ -18,3 +18,4 @@ nms = set([cat['supercategory'] for cat in cats])
 print('COCO supercategories: \n{}'.format(' '.join(nms)))
 
 catIds = coco.getCatIds(catNms=['background']);
+coco.download()
