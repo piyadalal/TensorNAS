@@ -47,7 +47,7 @@ vww = VisualWakeWords(annFile)
 print("Category Id {}".format(vww.getCatIds()))
 # display Visual Wake Words categories and supercategories
 cats = vww.loadCats(vww.getCatIds())
-
+vww.loadAnns()
 print("Categories {}".format(cats))
 nms=[cat['name'] for cat in cats]
 print('Visual Wake Words subcategories: \n{}\n'.format(' '.join(nms)))
